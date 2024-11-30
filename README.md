@@ -107,4 +107,30 @@ The last step of preprocessing is the first step of the BPNet pipeline (extracti
 bash-4.4~$ bpnet negatives -i bedfile.bed -f genome.fa -b bamfile.bw -o matched_loci.bed -l 0.02 -w 2114 -v
 ```
 
-Now we are ready to train BPNet. 
+Now we are ready to train BPNet.
+
+## Training and Using BPNet
+The bpnet command line tool takes arguments through a JSON file. Example JSONS for all steps in the pipeline can be found on the BPNet [GitHub Repo](https://github.com/jmschrei/bpnet-lite/tree/master/example_jsons). Be aware that some of the JSONS in this repository have typos (missing commas, etc.). You can create your json following these templates, or the ones in this repository. 
+
+To use BPNet in interactive mode, you need to log into a compute node from the login node. These are the same parameters that are specified in the qsub script. You need to request a GPU with a compute capacity of at least 6. Along with it, we request 4 CPUs. These options are described on the BU SCC [TechWeb](https://www.bu.edu/tech/support/research/software-and-programming/gpu-computing/) website. 
+```console 
+bash-4.4~$ qrsh -l gpus=1 -l gpu_c=6.0 -pe omp 4
+```
+
+When you log into the compute node, it will automatically log you into your home directory and modules you loaded in the login node will not be loaded. Go back into your project directory and reactivate your conda environment 
+```console 
+bash-4.4~$ cd ../../../projectnb/siggers/thadz
+bash-4.4~$ module load miniconda
+bash-4.4~$ conda activate bpnet
+```
+
+Now fit the model using the parameters specified in your JSON files. 
+```console 
+bash-4.4~$ bpnet fit -p jsons/bpnet_fit_example.json
+```
+
+The torch file is the trained BPNet model, which you supply in the JSON for the predict step. I would encourage looking at the log file to examine the mean-squared error and Pearson correlation coefficient for testing before going to the prediction step. Run the prediction step with
+```console 
+bash-4.4~$ bpnet predict -p jsons/bpnet_predict_example.json
+```
+This will output two npz tiles, one that predicts the counts and one that prevents the profile of the ChIP.
