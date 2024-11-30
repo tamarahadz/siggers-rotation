@@ -69,3 +69,42 @@ bash-4.4~$ while IFS="" read -r p; do
 done < hg38.chrom.sizes
 ```
 Now we are ready to begin preprocessing
+
+## Preprocessing
+After you have all of your files, you can create a bash script to do all of the following steps in this tutorial (you can follow the examples in this repo, ```siggers_bpnet.sh``` for data coming from the Siggers lab or ```encode_bpnet.sh``` for data coming from ENCODE). You can submit your script to the SCC with 
+
+```console 
+bash-4.4~$ qsub siggers_bpnet.sh
+```
+You can also do this tutorial in interactive mode by following the rest of the steps in your console. 
+
+Load the modules needed to convert the BAM file to a bigWig file from the SCC. 
+```console 
+bash-4.4~$ module load samtools
+bash-4.4~$ module load bedtools
+bash-4.4~$ module load ucscutils
+```
+
+Use samtools to sort the BAM file. This will create lots of temporary files first. If your BAM file is particularly large, you may not be able to run this command in interactive mode. 
+```console 
+bash-4.4~$ samtools sort bamfile.bam -o bamfile_sorted.bam
+```
+
+Use bedtools to convert the sorted BAM file to a bedGraph file. 
+
+```console 
+bash-4.4~$ bedtools genomecov -5 -bg -ibam bamfile_sorted.bam | LC_COLLATE=C sort -k1,1 -k2,2n > bamfile.bedGraph
+```
+
+Finally, use bedGraphToBigWig to convert the bedGraph to a bigWig file. This is where you need the chromosome sizes file (which you downloaded from the ENCODE database, or modified from the UCSC file)
+
+```console 
+bash-4.4~$ bedGraphToBigWig bamfile.bedGraph hg38_siggers.chrom.sizes bamfile.bw
+```
+
+The last step of preprocessing is the first step of the BPNet pipeline (extracting GC-matched negatives).
+```console 
+bash-4.4~$ bpnet negatives -i bedfile.bed -f genome.fa -b bamfile.bw -o matched_loci.bed -l 0.02 -w 2114 -v
+```
+
+Now we are ready to train BPNet. 
