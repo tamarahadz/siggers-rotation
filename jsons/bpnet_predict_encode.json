@@ -1,0 +1,14 @@
+{
+   "batch_size":64,
+   "in_window":2114,
+   "out_window":1000,
+   "verbose":true,
+   "chroms":["chr8", "chr10"],
+   "model":"h3k27ac_encode.final.torch",
+
+   "sequences":"/projectnb/siggers/genomes/hg38/sequences/genome.fa",
+   "loci":"data/ENCFF269RAB.bed",
+
+   "profile_filename": "y_profile_H3K27ac_encode.npz",
+   "counts_filename": "y_counts_H3K27ac_encode.npz"
+}

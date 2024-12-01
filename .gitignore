@@ -1,0 +1,5 @@
+data/*
+encode_h3k27ac*
+siggers_h3k27ac*
+*.log
+*.torch
