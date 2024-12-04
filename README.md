@@ -35,7 +35,8 @@ Create a directory where you will store your data
 bash-4.4~$ mkdir data
 ```
 
-Copy your BAM and BED files to that directory. For the ENCODE data, get files from their corresponding link on the ENCODE website 
+Copy your BAM and BED files to that directory. For the ENCODE data, get files from their corresponding link on the ENCODE website. For example, for the dataset [ENCSR000AKY](https://www.encodeproject.org/experiments/ENCSR000AKY/), the experiment has three biological replicates and has Control BAMs ([rep1](https://www.encodeproject.org/files/ENCFF226FKB/@@download/ENCFF226FKB.bam),[rep2](https://www.encodeproject.org/files/ENCFF666YXZ/@@download/ENCFF666YXZ.bam),[rep3](https://www.encodeproject.org/files/ENCFF420ARY/@@download/ENCFF420ARY.bam)), Experimental BAMs ([rep1](https://www.encodeproject.org/files/ENCFF600THN/@@download/ENCFF600THN.bam),[rep2](https://www.encodeproject.org/files/ENCFF704LGA/@@download/ENCFF704LGA.bam),[rep3](https://www.encodeproject.org/files/ENCFF232RQF/@@download/ENCFF232RQF.bam)), and BED files ([rep1](https://www.encodeproject.org/files/ENCFF269RAB/@@download/ENCFF269RAB.bed.gz),[rep2](https://www.encodeproject.org/files/ENCFF546CSD/@@download/ENCFF546CSD.bed.gz),[3](https://www.encodeproject.org/files/ENCFF652VDP/@@download/ENCFF652VDP.bed.gz)) 
+
 ```console 
 bash-4.4~$ cd data
 bash-4.4~$ wget https://www.encodeproject.org/files/ENCFF226FKB/@@download/ENCFF226FKB.bam
@@ -71,10 +72,10 @@ done < hg38.chrom.sizes
 Now we are ready to begin preprocessing
 
 ## Preprocessing
-After you have all of your files, you can create a bash script to do all of the following steps in this tutorial (you can follow the examples in this repo, ```siggers_bpnet.sh``` for data coming from the Siggers lab or ```encode_bpnet.sh``` for data coming from ENCODE). You can submit your script to the SCC with 
+After you have all of your files, you can create a bash script to do all of the following steps in this tutorial. You can follow the example in this repo, ```bpnet.sh```, which uses the data coming from the Siggers lab. You can submit your script to the SCC with 
 
 ```console 
-bash-4.4~$ qsub siggers_bpnet.sh
+bash-4.4~$ qsub bpnet.sh
 ```
 You can also do this tutorial in interactive mode by following the rest of the steps in your console. 
 
