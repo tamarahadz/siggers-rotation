@@ -134,3 +134,18 @@ The torch file is the trained BPNet model, which you supply in the JSON for the 
 bash-4.4~$ bpnet predict -p jsons/bpnet_predict_example.json
 ```
 This will output two npz tiles, one that predicts the counts and one that prevents the profile of the ChIP.
+
+## Future Steps
+**Running with control files** - I was unable to figure out how to run the package with the control bigwig files. I used the same methodology used to process the experimental BAMs to process the control BAMs. Then in the JSON parameters, I specified the controls in the same way as I did with the experimentals. However, I would get the following type of pytorch error 
+
+```console 
+RuntimeError: Given groups=1, weight of size [1, 66, 75], expected input[64, 65, 2114] to have 66 channels, but got 65 channels instead
+```
+
+According to the original paper, the control track is supposed to be "input for ChIP–seq and PATCH–CAP for ChIP–nexus." I found this a bit unclear for our ChIP-seq data so I tried using a different experiment (ex: for the Siggers lab data, the EP300 experiment) or the files listed as ENCODE as controls (ex: ```ENCFF226FKB.bam``` is the control for ```ENCFF600THN.bam```), and both of these still gave me this error. 
+
+**Interpreting results** - I have a vague idea about what the counts and profile refer to; however I was not able to go too into depth into understanding how these predictions can be interpreted biologically
+
+**Using the full bersion of BPNet** - I was advised to use the lite version of BPNet, since the full version is built in TensorFlow and can often be hard to install. However, on the BPNet Lite repo, it states "This package is meant to be used for quickly exploring data sets using BPNet or ChromBPNet and as a springboard for prototyping new ideas that involve modifying the code." I have not yet looked into performance of BPNet vs BPNet Lite, but the main question I have is whether this means that BPNet Lite can't be used with DeepLIFT or TFModisco or to get biological insights about the data.
+
+**Data performance** - The file system that hosts already preprocessed files mentioned in the paper can be found [here](https://mitra.stanford.edu/kundaje/avsec/chipnexus/paper/data/). There seem to be some differences between model performance on their ChIP-seq data and ChIP-seq data from ENCODE and ChIP-seq from the Siggers lab. ENCODE data and Siggers lab data both perform similarly to each other, but BPNet with and without controls has much higher Pearson correlation in predicting the profile. I am wondering whether this is due to data processing - on their repo it says that the alignment was done with ChroMAP - could this be affecting results?
